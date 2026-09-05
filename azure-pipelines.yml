@@ -1,37 +1,24 @@
-# ASP.NET Core
-- task: AzureResourceManagerTemplateDeployment@3
-  inputs:
-    deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'SESYSE-Azure-Service'
-    subscriptionId: '369e177d-b76e-462e-8009-1adc9ccc51c9'
-    action: 'Create Or Update Resource Group'
-    resourceGroupName: 'sesyse'
-    location: 'Germany West Central'
-    templateLocation: 'Linked artifact'
-    csmFile: 'microsoftonline.com'
-    deploymentMode: 'Incremental'
-    deploymentName: 'Azure sdk for Microsoft SESYSE'
-    deploymentOutputs: 'SESYSE'
-    addSpnToEnvironment: true
-    useWithoutJSON: true
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, dep9loy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
+trigger:
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  buildConfiguration: 'Release'
-
-
 steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk'
+- task: UseRubyVersion@0
+  displayName: 'Use Ruby 3.1'
   inputs:
-    packageType: sdk
-    version: 3.x
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-- script: dotnet build ../../samples/lineCounter/LineCounter.csproj --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+    versionSpec: '3.1'
+
+- script: |
+    gem install bundler -v 2.3.17 --no-document
+    bundle _2.3.17_ install --jobs 4
+    bundle _2.3.17_ exec jekyll build
+  displayName: 'Build Jekyll site'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish site artifact'
+  inputs:
+    PathtoPublish: '_site/azure-sdk'
+    ArtifactName: 'sesyse-site'
+    publishLocation: 'Container'
