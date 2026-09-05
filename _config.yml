@@ -9,6 +9,8 @@ tipue_search:
 # feed.xml
 title: Azure SDKs
 description: "The design guidelines and policies under which the Azure SDKs are designed and built."
+url: http://sesyse.de
+baseurl: ""
 topnav_title: Azure SDKs
 site_title: Azure SDKs
 company_name: Microsoft Azure
@@ -21,7 +23,6 @@ app_insights: 5e03f19a-f5b4-4620-97d5-35707cec7fcb
 # The preview server settings
 host: 127.0.0.1
 port: 4000
-baseurl: /azure-sdk
 destination: ./_site/azure-sdk
 output: web
 
